@@ -56,6 +56,13 @@ const Input = styled.input`
 	}
 `;
 
+const Wrapper = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+`;
+
 const ButtonControl = styled.button<{ variant?: "delete" }>`
 	background-color: transparent;
 	border: none;
@@ -64,6 +71,8 @@ const ButtonControl = styled.button<{ variant?: "delete" }>`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	size: 30px;
+	transition: color 0.3s ease;
 
 	&:hover svg {
 		stroke: ${(props) =>
@@ -109,16 +118,16 @@ export const TodoItem = memo(({ todo }: TodoItemsProps) => {
 					setEditMode={handleToggleEditMode}
 				/>
 			</Label>
-			<>
+			<Wrapper>
 				<ButtonControl
 					onClick={handleToggleEditMode}
 					aria-label={editMode ? "Cancel editing" : "Edit todo"}
 					title={editMode ? "Cancel editing" : "Edit todo"}
 				>
 					{editMode ? (
-						<LuPenOff color="#646cff" size={22} />
+						<LuPenOff color="#646cff" size={21} />
 					) : (
-						<LuPen color="#646cff" size={22} />
+						<LuPen color="#646cff" size={21} />
 					)}
 				</ButtonControl>
 
@@ -128,9 +137,9 @@ export const TodoItem = memo(({ todo }: TodoItemsProps) => {
 					aria-label="Delete todo"
 					title="Delete todo"
 				>
-					<LuTrash2 color="#646cff" size={22} />
+					<LuTrash2 color="#646cff" size={21} />
 				</ButtonControl>
-			</>
+			</Wrapper>
 		</ListItem>
 	);
 });

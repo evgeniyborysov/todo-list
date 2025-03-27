@@ -17,6 +17,10 @@ const TodoTitle = styled.span<TitleProps>`
 	&:hover {
 		opacity: 0.8;
 	}
+
+	@media (max-width: 600px) {
+		font-size: 14px;
+	}
 `;
 
 const EditInput = styled.input`

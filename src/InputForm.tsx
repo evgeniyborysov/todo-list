@@ -23,6 +23,10 @@ const Form = styled.form`
 	background-color: ${(props) => props.theme.bgColor};
 	border-radius: 10px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+	@media (max-width: 600px) {
+		padding: 15px 10px;
+	}
 `;
 
 const Input = styled.input.attrs({ type: "text" })`
@@ -38,6 +42,10 @@ const Input = styled.input.attrs({ type: "text" })`
 	&:focus {
 		border-color: #5c5cff;
 		box-shadow: 0 0 5px rgba(92, 92, 255, 0.5);
+	}
+
+	@media (max-width: 600px) {
+		font-size: 13px;
 	}
 `;
 
@@ -67,6 +75,12 @@ const Button = styled.button<StyledButtonProps>`
 	&:focus-visible {
 		outline: 2px solid #4b4bff;
 		outline-offset: 2px;
+	}
+
+	@media (max-width: 600px) {
+		font-size: 14px;
+		padding: 10px 10px;
+		min-width: 60px;
 	}
 `;
 
