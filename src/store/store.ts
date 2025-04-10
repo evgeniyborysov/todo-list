@@ -19,6 +19,17 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
+import {
+	collection,
+	addDoc,
+	deleteDoc,
+	doc,
+	updateDoc,
+	getDocs,
+} from "firebase/firestore";
+import { db } from "../firebase/config";
+import { themeReducer } from "./themeSlice";
+
 type ActionTodoEditType = {
 	id: string;
 	title: string;
@@ -30,6 +41,9 @@ const todoSlice = createSlice({
 	name: "todos",
 	initialState,
 	reducers: {
+		setTodos: (state, action: PayloadAction<TodoType[]>) => {
+			return action.payload;
+		},
 		addTodo: (state, action: PayloadAction<TodoType>) => {
 			state.push(action.payload);
 		},
@@ -58,17 +72,52 @@ const todoSlice = createSlice({
 
 const todosReducer = todoSlice.reducer;
 
-export const { addTodo, deleteTodo, toggleTodo, editTodo, clearCompletedTodo } =
-	todoSlice.actions;
+export const {
+	setTodos,
+	addTodo,
+	deleteTodo,
+	toggleTodo,
+	editTodo,
+	clearCompletedTodo,
+} = todoSlice.actions;
+
+// Thunks для работы с Firebase
+export const fetchTodos = () => async (dispatch: AppDispatch) => {
+	const querySnapshot = await getDocs(collection(db, "todos"));
+	const todos = querySnapshot.docs.map((doc) => ({
+		id: doc.id,
+		...doc.data(),
+	})) as TodoType[];
+	dispatch(setTodos(todos));
+};
+
+export const addTodoAsync =
+	(todo: Omit<TodoType, "id">) => async (dispatch: AppDispatch) => {
+		const docRef = await addDoc(collection(db, "todos"), todo);
+		dispatch(addTodo({ ...todo, id: docRef.id }));
+	};
+
+export const deleteTodoAsync =
+	(id: string) => async (dispatch: AppDispatch) => {
+		await deleteDoc(doc(db, "todos", id));
+		dispatch(deleteTodo(id));
+	};
+
+export const toggleTodoAsync =
+	(id: string, completed: boolean) => async (dispatch: AppDispatch) => {
+		await updateDoc(doc(db, "todos", id), { completed: !completed });
+		dispatch(toggleTodo(id));
+	};
 
 const rootReducer = combineReducers({
 	todos: todosReducer,
+	theme: themeReducer,
 });
 
 const persistConfig = {
 	key: "root",
 	storage,
-	whitelist: ["todos"],
+	whitelist: ["theme"],
 };
 
 const persistedReducer = persistReducer<RootReducer>(

@@ -1,19 +1,22 @@
-import { useMemo, useState } from "react";
-import { v1 } from "uuid";
+import { useMemo, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import "./App.css";
-import { addTodo, useAppDispatch } from "./store/store";
+import {
+	fetchTodos,
+	addTodoAsync,
+	useAppDispatch,
+	useAppSelector,
+} from "./store/store";
 import { Todolist } from "./Todolist";
 import { darkTheme, lightTheme } from "./Theme";
 import { Header } from "./Header";
+import { toggleTheme } from "./store/themeSlice";
 
 export type TodoType = {
 	id: string;
 	title: string;
 	completed: boolean;
 };
-
-type ThemeType = "light" | "dark";
 
 export type TodoListProps = {
 	clearCompletedTodo: () => void;
@@ -41,39 +44,36 @@ const StyledApp = styled.div`
 `;
 
 function App() {
-	const [theme, setTheme] = useState<ThemeType>("light");
-
-	const toggleTheme = () => {
-		// setTheme(theme === "light" ? "dark" : "light");
-		setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-	};
-
+	const theme = useAppSelector((state) => state.theme);
 	const dispatch = useAppDispatch();
-
-	const addTodoHandler = (title: string) => {
-		const newTodo = {
-			id: v1(),
-			title,
-			completed: false,
-		};
-		dispatch(addTodo(newTodo));
-	};
-
-	// const clearCompletedHandler = () => {
-	// 	dispatch(clearCompletedTodo());
-	// };
 
 	const currentTheme = useMemo(
 		() => (theme === "light" ? lightTheme : darkTheme),
 		[theme]
 	);
 
+	useEffect(() => {
+		dispatch(fetchTodos());
+	}, [dispatch]);
+
+	const addTodoHandler = (title: string) => {
+		const newTodo = {
+			title,
+			completed: false,
+		};
+		dispatch(addTodoAsync(newTodo));
+	};
+
+	const toggleThemeHandler = () => {
+		dispatch(toggleTheme());
+	};
+
 	return (
 		<ThemeProvider theme={currentTheme}>
 			<StyledApp>
 				<Header
 					theme={theme}
-					toggleTheme={toggleTheme}
+					toggleTheme={toggleThemeHandler}
 					addTodoHandler={addTodoHandler}
 				/>
 				<Todolist />

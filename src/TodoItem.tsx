@@ -2,7 +2,11 @@ import styled from "styled-components";
 import { LuTrash2, LuPen, LuPenOff } from "react-icons/lu";
 import { EditableSpan } from "./EditableSpan";
 import { TodoType } from "./App";
-import { useAppDispatch, deleteTodo, toggleTodo } from "./store/store";
+import {
+	useAppDispatch,
+	deleteTodoAsync,
+	toggleTodoAsync,
+} from "./store/store";
 import { useState, memo } from "react";
 
 const ListItem = styled.li`
@@ -89,11 +93,11 @@ export const TodoItem = memo(({ todo }: TodoItemsProps) => {
 	const dispatch = useAppDispatch();
 
 	const handleDeleteTodo = () => {
-		dispatch(deleteTodo(todo.id));
+		dispatch(deleteTodoAsync(todo.id));
 	};
 
 	const handleToggleTodo = () => {
-		dispatch(toggleTodo(todo.id));
+		dispatch(toggleTodoAsync(todo.id, todo.completed));
 	};
 
 	const handleToggleEditMode = () => {

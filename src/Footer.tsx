@@ -31,7 +31,7 @@ const Wrapper = styled.div`
 		gap: 5px;
 	}
 
-	@media (max-width: 375px) {
+	@media (max-width: 480px) {
 		flex-direction: column;
 	}
 `;
@@ -49,19 +49,14 @@ const Button = styled.button<ButtonTitleProps>`
 
 	&:hover {
 		color: #5c5cff;
-		transform: scale(1.05);
-	}
-
-	&:active {
-		transform: scale(0.98);
 	}
 
 	@media (max-width: 600px) {
-		padding: 5px 10px;
+		padding: 8px;
 	}
 
 	@media (max-width: 480px) {
-		padding: 8px;
+		padding: 5px;
 	}
 `;
 
@@ -73,21 +68,12 @@ const ClearButton = styled(Button)`
 	&:hover {
 		color: #ff0000;
 	}
-
-	@media (max-width: 480px) {
-		order: 2;
-	}
 `;
 
 const Itemsleft = styled.p`
 	font-size: 14px;
 	color: #000000;
 	transition: color 0.3s ease;
-
-	@media (max-width: 480px) {
-		text-align: center;
-		width: 100%;
-	}
 `;
 
 const FilterButtonGroup = styled.div`
@@ -97,12 +83,14 @@ const FilterButtonGroup = styled.div`
 	align-items: center;
 	gap: 10px;
 
-	@media (max-width: 768px) {
-		gap: 6px;
-	}
+	// @media (max-width: 768px) {
+	// 	justify-content: space-between;
+	// 	gap: 5px;
+	// }
 
-	@media (max-width: 600px) {
-		gap: 4px;
+	@media (max-width: 480px) {
+		width: 100%;
+		justify-content: space-evenly;
 	}
 `;
 
@@ -111,7 +99,6 @@ export const Footer = ({ filter, changeFilter }: FooterProps) => {
 	const dispatch = useAppDispatch();
 
 	const activeTodosCount = todos.filter((todo) => !todo.completed).length;
-	console.log(activeTodosCount);
 
 	const handleClearCompleted = () => {
 		dispatch(clearCompletedTodo());
