@@ -41,7 +41,7 @@ const todoSlice = createSlice({
 	name: "todos",
 	initialState,
 	reducers: {
-		setTodos: (state, action: PayloadAction<TodoType[]>) => {
+		setTodos: (_, action: PayloadAction<TodoType[]>) => {
 			return action.payload;
 		},
 		addTodo: (state, action: PayloadAction<TodoType>) => {
